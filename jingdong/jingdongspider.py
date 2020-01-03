@@ -18,11 +18,14 @@ class JingdongSpider():
         self.mongo_uri = mongo_uri
         self.mongo_db = mongo_db
         self.mongo_collection = mongo_collection
+        #使用谷歌浏览器操作，并设置为无头操作，也就是隐藏浏览器窗口操作
         self.options = webdriver.ChromeOptions()
         self.options.add_argument('--headless')
         self.browser = webdriver.Chrome(options=self.options)
+        #设置延时等待10s
         self.wait = WebDriverWait(self.browser, 10)
         self.url = 'https://search.jd.com/Search?keyword=' + quote(self.keyword)
+        #连接MongoDB
         self.client = pymongo.MongoClient(self.mongo_uri)
         self.db = self.client[self.mongo_db]
 
@@ -32,6 +35,7 @@ class JingdongSpider():
         try:
             self.browser.get(self.url)
             if page > 1:
+                #跳转页面进行爬取
                 input = self.wait.until(
                     EC.presence_of_element_located((By.XPATH, '//div[@id="J_bottomPage"]//input[@class="input-txt"]'))
                 )
@@ -42,8 +46,10 @@ class JingdongSpider():
                 input.send_keys(page)
                 submit.click()
                 self.browser.refresh()
+            #下拉滚动条到页面底部，并等待1s让数据加载完成
             self.browser.execute_script('window.scrollTo(0, document.body.scrollHeight)')
             time.sleep(1)
+            #判断当前页码是否与爬取页码一致和能否定位到商品信息
             self.wait.until(
                 EC.text_to_be_present_in_element((By.CSS_SELECTOR, '#J_bottomPage .p-num a.curr'), str(page))
             )
