@@ -32,6 +32,7 @@ class JingdongSpider():
 
     #使用selenium模拟浏览器操作获取完整的动态加载的页面
     def get_page(self, page):
+        print('正在爬取第',page,'页')
         try:
             self.browser.get(self.url)
             if page > 1:
