@@ -4,4 +4,4 @@
 由于京东的商品页面有一半内容是需要通过JavaScript动态渲染才能完整显示，而不像静态的html页面一样当发送请求获取页面时就会获得一个完整的页面，这里需要下拉滚动条到页面底部才能获得剩下所有商品信息，使用requests不能满足这个要求，所以使用selenium这个自动化测试工具去模拟浏览器发送请求并模拟浏览器操作得到完整的商品信息页面，然后使用pyquery这个解析库去提取数据，pyquery是一个专门使用CSS选择器进行解析数据的库，所以这里采用CSS选择器的方法来提取数据，然后提取数据后再将数据保存到MongoDB里。
 
 ## 使用的技术：
-selenium，pyquery，MongoDB，time
+selenium，pyquery，MongoDB，time，urllib.parse
